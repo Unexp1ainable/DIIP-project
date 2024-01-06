@@ -5,17 +5,21 @@ path = './data/images';
 
 imageFiles = dir(fullfile(path, '*.JPG'));
 
-for i = 1:1
+for i = 1:length(imageFiles)
+%for i = 6:6
     img = imread(fullfile(path, imageFiles(i).name));
-    [imagePoints,boardSize,imagesUsed] = detectCheckerboardPoints(img);
+    [imagePoints,boardSize,imagesUsed] = detectCheckerboardPoints(img, PartialDetections=false);
     
     boardRows = boardSize(1)-1;
     boardCols = boardSize(2)-1;
     
     % Insert markers at detected point locations
-    % for j = 1:size(imagePoints,1)
-    %     img = insertShape(img, 'FilledCircle', [imagePoints(j,1) imagePoints(j,2) 15], 'Color', 'red');
-    % end
+    for j = 1:size(imagePoints,1)
+        if isnan(imagePoints(j,1))
+            continue;
+        end
+        img = insertShape(img, 'FilledCircle', [imagePoints(j,1) imagePoints(j,2) 15], 'Color', 'red');
+    end
     
     sumY = [0 0];
     num = 0;
@@ -76,7 +80,9 @@ for i = 1:1
 
     
     % Display image
-    %   imshow(img);
+    figure;
+    title(imageFiles(i).name)
+    imshow(img);
 end
 
 function out = preprocess(img)
