@@ -1,3 +1,15 @@
+% determineCoin - Function to determine the type of coin based on its diameter.
+%
+% Syntax: coinId = determineCoin(diameter)
+%
+% Inputs:
+%   - diameter: The diameter of the coin in millimeters.
+%
+% Output:
+%   - coinId: The identification of the coin.
+%
+% Example:
+%   coinId = determineCoin(25)
 function coinId = determineCoin(diameter)
     e2 = 25.75;
     e1 = 23.25;
