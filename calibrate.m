@@ -1,7 +1,7 @@
 % calibrate - Function to calibrate an image using bias, dark, and flat fields.
 %
 % Syntax:
-%   img = calibrate(img, bias, dark, flat, show)
+%   out = calibrate(img, bias, dark, flat, show)
 %
 % Inputs:
 %   img   - Input image to be calibrated.
@@ -11,7 +11,7 @@
 %   show  - Flag to indicate whether to display the calibrated image (optional).
 %
 % Output:
-%   img   - Calibrated image.
+%   out   - Calibrated image.
 function img = calibrate(img, bias, dark, flat, show)
     norm_F = flat - bias - dark;
     norm_F = uint8(double(norm_F)./double(mean(norm_F(:))));
