@@ -19,8 +19,7 @@
 %   flat = imread('flat.jpg');
 %   show = true;
 %   [centers, radii, metric] = measureCoins(img, bias, dark, flat, show);
-function [centers, radii, metric] = measureCoins(img,  bias, dark, flat, show)
-    img = calibrate(img, bias, dark, flat, show);
+function [centers, radii, metric] = measureCoins(img, show)
     out = preprocess(img, show);
     [centers, radii, metric] = imfindcircles(out, [150 350], 'ObjectPolarity', 'bright', 'Sensitivity', 0.95);
 
@@ -28,43 +27,11 @@ function [centers, radii, metric] = measureCoins(img,  bias, dark, flat, show)
         figure;
         imshow(out);
         hold on;
-        viscircles(centers, radii, 'EdgeColor', 'b');
+        % viscircles(centers, radii, 'EdgeColor', 'b');
         title('Circles');
         hold off;
     end
 end
-
-
-% calibrate - Function to calibrate an image using bias, dark, and flat fields.
-%
-% Syntax:
-%   img = calibrate(img, bias, dark, flat, show)
-%
-% Inputs:
-%   img   - Input image to be calibrated.
-%   bias  - Bias field image.
-%   dark  - Dark field image.
-%   flat  - Flat field image.
-%   show  - Flag to indicate whether to display the calibrated image (optional).
-%
-% Output:
-%   img   - Calibrated image.
-function img = calibrate(img, bias, dark, flat, show)
-    master_dark = dark - bias;
-    flat = flat - master_dark;
-
-    norm_F = flat;
-    norm_F = (double(norm_F)./double(mean(norm_F(:))));
-
-    calibrated_image = double(img - bias - master_dark) ./ norm_F;
-    out = calibrated_image;
-
-    if show
-        subplot(121); imshow(img); title('Raw Image')
-        subplot(122);imshow(out); title('Calibrated Image')
-    end
-end
-
 
 
 % preprocess - Preprocesses an image for coin measurement.

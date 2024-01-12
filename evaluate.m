@@ -3,7 +3,7 @@ clc; clear; close all;
 path = './data/images';
 
 imageFiles = dir(fullfile(path, '*.JPG'));
-% a = 1;
+a = 1;
 % for i = a:a
 for i = 1:numel(imageFiles)
     img = imread(fullfile(path, imageFiles(i).name));

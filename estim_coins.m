@@ -22,11 +22,13 @@ function [coins] = estim_coins(measurement, bias, dark, flat)
         debug = true;
     end
 
+    calibrated = calibrate(measurement, bias, dark, flat, false);
+
     % Find circles
-    [centers, radii, metric] = measureCoins(measurement, bias, dark, flat, debug);
+    [centers, radii, metric] = measureCoins(calibrated, false);
     
     % Get pixel size
-    [px, py] = getPixelSize(measurement, false);
+    [px, py] = getPixelSize(calibrated, false);
 
     % Determine coin type
     coins = [0,0,0,0,0,0];
@@ -35,17 +37,17 @@ function [coins] = estim_coins(measurement, bias, dark, flat)
         coinId = determineCoin(diameter);
         coins(coinId) = coins(coinId) + 1;
 
-        % show measurement with circles and coin type if debug mode is on
+        % show calibrated with circles and coin type if debug mode is on
         if (debug)
             coinStr = coinId2Str(coinId);
-            measurement = insertShape(measurement, 'circle', [centers(j, 1), centers(j, 2), radii(j)], 'LineWidth', 2, 'Color', 'green');
-            measurement = insertText(measurement, [centers(j, 1) - radii(j), centers(j, 2) - radii(j)], coinStr, 'FontSize', 50, 'TextColor', 'black');
+            calibrated = insertShape(calibrated, 'circle', [centers(j, 1), centers(j, 2), radii(j)], 'LineWidth', 2, 'Color', 'green');
+            calibrated = insertText(calibrated, [centers(j, 1) - radii(j), centers(j, 2) - radii(j)], coinStr, 'FontSize', 50, 'TextColor', 'black');
         end
     end
 
-    % show measurement with circles and coin type if debug mode is on
+    % show calibrated with circles and coin type if debug mode is on
     if (debug)
         figure;
-        imshow(measurement);
+        imshow(calibrated);
     end
 end
